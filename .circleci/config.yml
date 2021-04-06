@@ -1,0 +1,22 @@
+version: 2.1
+jobs:
+  compile:
+   docker:
+      - image: ubuntu:18.04
+   steps:
+      - run:
+          no_output_timeout: 1h
+          command: |
+           apt-get -y update && apt-get -y upgrade && apt-get -y install bc build-essential zip curl libstdc++6 git wget python gcc clang libssl-dev repo rsync flex bison
+           git config --global user.name "hpnightowl"
+           git config --global user.email "iamhp2k@gmail.com"
+           git clone https://github.com/akhilnarang/scripts && cd scripts && bash setup/android_build_env.sh && cd ..
+           git clone https://github.com/hpnightowl/kernel_xiaomi_ginkgo.git kernel
+           cd kernel
+           wget https://raw.githubusercontent.com/hpnightowl/kernel_xiaomi_ginkgo/eleven/build.sh
+           source build.sh
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - compile 
